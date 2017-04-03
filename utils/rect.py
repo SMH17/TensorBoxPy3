@@ -1,3 +1,5 @@
+# TensorBoxPy3 https://github.com/SMH17/TensorBoxPy3
+
 class Rect(object):
     def __init__(self, cx, cy, width, height, confidence):
         self.cx = cx

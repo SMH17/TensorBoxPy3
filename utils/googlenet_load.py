@@ -1,3 +1,5 @@
+# TensorBoxPy3 https://github.com/SMH17/TensorBoxPy3
+
 from utils.slim_nets import inception_v1 as inception
 from utils.slim_nets import resnet_v1 as resnet
 import tensorflow.contrib.slim as slim

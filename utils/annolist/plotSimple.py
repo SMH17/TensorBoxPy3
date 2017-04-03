@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# TensorBoxPy3 https://github.com/SMH17/TensorBoxPy3
 
 import sys
 import os

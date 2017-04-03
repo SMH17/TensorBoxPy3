@@ -1,3 +1,5 @@
+# TensorBoxPy3 https://github.com/SMH17/TensorBoxPy3
+
 #A tool for hand labelling images
 #Generates an IDL file
 #pass in the directory where you store your images and a filename, then select the points on the images
@@ -118,7 +120,7 @@ ax = plt.gca()
 
 #get our files for processing
 if len(sys.argv) < 3:
-    print("Too few params, try something like:  python make_json.py train640x480 train.json")
+    print("Too few params, try something like:  python make_json.py trainfolder640x480 train.json")
     exit()
 path = sys.argv[1]
 outfile_name = sys.argv[2]
