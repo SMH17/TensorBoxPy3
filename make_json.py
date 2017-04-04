@@ -1,19 +1,13 @@
 # TensorBoxPy3 https://github.com/SMH17/TensorBoxPy3
 
-#A tool for hand labelling images
-#Generates an IDL file
-#pass in the directory where you store your images and a filename, then select the points on the images
-#every time you hit next a line is generated
-#the clear button removes are selected points on the current image
-#when all files in the directory are processed, the idl file is written out
-
-#ex: python make_idl.py train640x480 train.idl
-
-#altered to output json
-#ex: python make_json.py train640x480 train.json
-#added button to skip an image
-#enforce convention that rects are in top left, bottom right order
-#correct name of image path object
+#A tool for hand labelling images generating json files
+#
+#Pass in the directory where you store your images and a filename, then select the points on the images.
+#Every time you hit next a json object is generated.
+#The clear button removes all selected points on the current image, undo cancel your last action.
+#When all files in the directory are processed, the json file is written out.
+#
+#Is enforced convention that rects are in top left, bottom right order.
 
 import sys
 import json
@@ -159,4 +153,4 @@ outfile.close()
 progress_outfile.close()
 
 
-print("finished")
+print("labelling finished")

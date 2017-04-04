@@ -1,5 +1,11 @@
 # TensorBoxPy3 https://github.com/SMH17/TensorBoxPy3
 
+#Train TensorBoxPy3 using the configuration in the hypes file passed
+#you have to pass hype file and output folder, additionally you can explicit 
+#the weights, the number of train steps with --max_iter and GPU configuration with --gpu
+#e.g. python3 train.py --hypes hypes/overfeat_rezoom.json --gpu 0 --max_iter 5000 --logdir output
+#will train model using overfeat_rezoom.json with 5000 iterations using GPU 0
+
 import json
 import cv2
 import tensorflow.contrib.slim as slim

@@ -5,6 +5,9 @@ TensorBox fork by Silvio Marano.
 Compared to the original TensorBox release by russel91 for Python 2.6 and Tensorflow 0.11 
 this fork is aimed to support only the newer Python 3.x and Tensorflow 1.x versions, in addition 
 includes some minor fix to avoid crash of evaluation function and improve the Windows support.
+Additional features and utility will be added and development will diverge from original release 
+update after update, so pay attention if you try to mix code from TensorBoxPy3 with code of the 
+original TensorBox branch.
 Please check requirements file before try to run.
 
 The original ReadMe.md file is shown below.
