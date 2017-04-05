@@ -44,7 +44,6 @@ def model(x, H, reuse, is_training=True):
             _, T = inception.inception_v4(x,
                                           is_training=is_training,
                                           num_classes=1001,
-                                          spatial_squeeze=False,
                                           reuse=reuse)
             # print '\n'.join(map(str, [(k, v.op.outputs[0].get_shape()) for k, v in T.iteritems()]))
 

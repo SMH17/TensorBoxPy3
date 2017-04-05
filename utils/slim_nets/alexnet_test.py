@@ -13,9 +13,6 @@
 # limitations under the License.
 # ==============================================================================
 """Tests for slim.nets.alexnet."""
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 import tensorflow as tf
 
@@ -33,7 +30,7 @@ class AlexnetV2Test(tf.test.TestCase):
     with self.test_session():
       inputs = tf.random_uniform((batch_size, height, width, 3))
       logits, _ = alexnet.alexnet_v2(inputs, num_classes)
-      self.assertEquals(logits.op.name, 'alexnet_v2/fc8/squeezed')
+      self.assertEqual(logits.op.name, 'alexnet_v2/fc8/squeezed')
       self.assertListEqual(logits.get_shape().as_list(),
                            [batch_size, num_classes])
 
@@ -44,7 +41,7 @@ class AlexnetV2Test(tf.test.TestCase):
     with self.test_session():
       inputs = tf.random_uniform((batch_size, height, width, 3))
       logits, _ = alexnet.alexnet_v2(inputs, num_classes, spatial_squeeze=False)
-      self.assertEquals(logits.op.name, 'alexnet_v2/fc8/BiasAdd')
+      self.assertEqual(logits.op.name, 'alexnet_v2/fc8/BiasAdd')
       self.assertListEqual(logits.get_shape().as_list(),
                            [batch_size, 4, 7, num_classes])
 
@@ -129,7 +126,7 @@ class AlexnetV2Test(tf.test.TestCase):
                            [eval_batch_size, 4, 7, num_classes])
       logits = tf.reduce_mean(logits, [1, 2])
       predictions = tf.argmax(logits, 1)
-      self.assertEquals(predictions.get_shape().as_list(), [eval_batch_size])
+      self.assertEqual(predictions.get_shape().as_list(), [eval_batch_size])
 
   def testForward(self):
     batch_size = 1

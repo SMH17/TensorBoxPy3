@@ -14,10 +14,6 @@
 # ==============================================================================
 """Contains the definition for inception v3 classification network."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import tensorflow as tf
 
 from utils.slim_nets import inception_utils

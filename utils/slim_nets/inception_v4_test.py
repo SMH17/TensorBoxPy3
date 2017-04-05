@@ -13,9 +13,6 @@
 # limitations under the License.
 # ==============================================================================
 """Tests for slim.inception_v4."""
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 import tensorflow as tf
 
@@ -93,7 +90,7 @@ class InceptionTest(tf.test.TestCase):
                         'PreLogitsFlatten': [batch_size, 1536],
                         'Logits': [batch_size, num_classes],
                         'Predictions': [batch_size, num_classes]}
-    self.assertItemsEqual(endpoints_shapes.keys(), end_points.keys())
+    self.assertItemsEqual(list(endpoints_shapes.keys()), list(end_points.keys()))
     for endpoint_name in endpoints_shapes:
       expected_shape = endpoints_shapes[endpoint_name]
       self.assertTrue(endpoint_name in end_points)
@@ -114,8 +111,8 @@ class InceptionTest(tf.test.TestCase):
         'Mixed_5e', 'Mixed_6a', 'Mixed_6b', 'Mixed_6c', 'Mixed_6d',
         'Mixed_6e', 'Mixed_6f', 'Mixed_6g', 'Mixed_6h', 'Mixed_7a',
         'Mixed_7b', 'Mixed_7c', 'Mixed_7d']
-    self.assertItemsEqual(end_points.keys(), expected_endpoints)
-    for name, op in end_points.iteritems():
+    self.assertItemsEqual(list(end_points.keys()), expected_endpoints)
+    for name, op in end_points.items():
       self.assertTrue(op.name.startswith('InceptionV4/' + name))
 
   def testBuildOnlyUpToFinalEndpoint(self):
@@ -177,7 +174,7 @@ class InceptionTest(tf.test.TestCase):
       images = tf.random_uniform((batch_size, height, width, 3))
       sess.run(tf.global_variables_initializer())
       output = sess.run(logits, {inputs: images.eval()})
-      self.assertEquals(output.shape, (batch_size, num_classes))
+      self.assertEqual(output.shape, (batch_size, num_classes))
 
   def testEvaluation(self):
     batch_size = 2
@@ -191,7 +188,7 @@ class InceptionTest(tf.test.TestCase):
       predictions = tf.argmax(logits, 1)
       sess.run(tf.global_variables_initializer())
       output = sess.run(predictions)
-      self.assertEquals(output.shape, (batch_size,))
+      self.assertEqual(output.shape, (batch_size,))
 
   def testTrainEvalWithReuse(self):
     train_batch_size = 5
@@ -209,7 +206,7 @@ class InceptionTest(tf.test.TestCase):
       predictions = tf.argmax(logits, 1)
       sess.run(tf.global_variables_initializer())
       output = sess.run(predictions)
-      self.assertEquals(output.shape, (eval_batch_size,))
+      self.assertEqual(output.shape, (eval_batch_size,))
 
 
 if __name__ == '__main__':

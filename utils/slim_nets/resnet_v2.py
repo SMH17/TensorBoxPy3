@@ -48,9 +48,6 @@ ResNet-101 for semantic segmentation into 21 classes:
                                                 global_pool=False,
                                                 output_stride=16)
 """
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 import tensorflow as tf
 
