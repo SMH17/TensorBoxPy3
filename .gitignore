@@ -1,5 +1,4 @@
 *.pyc
-data/*
 output/*
 *.swp
 *.so

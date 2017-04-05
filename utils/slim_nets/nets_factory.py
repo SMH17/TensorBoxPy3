@@ -21,14 +21,14 @@ import functools
 
 import tensorflow as tf
 
-from nets import alexnet
-from nets import cifarnet
-from nets import inception
-from nets import lenet
-from nets import overfeat
-from nets import resnet_v1
-from nets import resnet_v2
-from nets import vgg
+from utils.slim_nets import alexnet
+from utils.slim_nets import cifarnet
+from utils.slim_nets import inception
+from utils.slim_nets import lenet
+from utils.slim_nets import overfeat
+from utils.slim_nets import resnet_v1
+from utils.slim_nets import resnet_v2
+from utils.slim_nets import vgg
 
 slim = tf.contrib.slim
 

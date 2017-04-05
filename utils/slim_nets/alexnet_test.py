@@ -19,7 +19,7 @@ from __future__ import print_function
 
 import tensorflow as tf
 
-from nets import alexnet
+from utils.slim_nets import alexnet
 
 slim = tf.contrib.slim
 
