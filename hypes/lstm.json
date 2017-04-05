@@ -30,7 +30,7 @@
     "avg_pool_size": 5,
     "slim_top_lname": "Mixed_5c",
     "slim_attention_lname": "Mixed_3b",
-    "slim_basename": "inception_v1",
+    "slim_basename": "InceptionV1",
     "slim_ckpt": "inception_v1.ckpt",
     "num_lstm_layers": 2,
     "image_width": 640, 

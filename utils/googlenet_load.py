@@ -4,48 +4,49 @@ from utils.slim_nets import inception
 from utils.slim_nets import resnet
 import tensorflow.contrib.slim as slim
 
+
 def model(x, H, reuse, is_training=True):
-    if H['slim_basename'] == 'resnet_v1':
+    if H['slim_basename'] == 'resnet_v1_101':
         with slim.arg_scope(resnet.resnet_arg_scope()):
             _, T = resnet.resnet_v1(x,
                                     is_training=is_training,
                                     num_classes=1000,
                                     reuse=reuse)
-	elif H['slim_basename'] == 'resnet_v2':
+    elif H['slim_basename'] == 'resnet_v2_101':
         with slim.arg_scope(resnet.resnet_arg_scope()):
             _, T = resnet.resnet_v2(x,
                                     is_training=is_training,
                                     num_classes=1000,
-                                    reuse=reuse)									
-    elif H['slim_basename'] == 'inception_v1':
+                                    reuse=reuse)
+    elif H['slim_basename'] == 'InceptionV1':
         with slim.arg_scope(inception.inception_v1_arg_scope()):
             _, T = inception.inception_v1(x,
                                           is_training=is_training,
                                           num_classes=1001,
                                           spatial_squeeze=False,
                                           reuse=reuse)
-	elif H['slim_basename'] == 'inception_v2':
+    elif H['slim_basename'] == 'InceptionV2':
         with slim.arg_scope(inception.inception_v2_arg_scope()):
             _, T = inception.inception_v2(x,
                                           is_training=is_training,
                                           num_classes=1001,
                                           spatial_squeeze=False,
                                           reuse=reuse)
-	elif H['slim_basename'] == 'inception_v3':
+    elif H['slim_basename'] == 'InceptionV3':
         with slim.arg_scope(inception.inception_v3_arg_scope()):
             _, T = inception.inception_v3(x,
                                           is_training=is_training,
                                           num_classes=1001,
                                           spatial_squeeze=False,
                                           reuse=reuse)
-	elif H['slim_basename'] == 'inception_v4':
+    elif H['slim_basename'] == 'InceptionV4':
         with slim.arg_scope(inception.inception_v4_arg_scope()):
             _, T = inception.inception_v4(x,
                                           is_training=is_training,
                                           num_classes=1001,
                                           spatial_squeeze=False,
-                                          reuse=reuse)									  
-    #print '\n'.join(map(str, [(k, v.op.outputs[0].get_shape()) for k, v in T.iteritems()]))
+                                          reuse=reuse)
+            # print '\n'.join(map(str, [(k, v.op.outputs[0].get_shape()) for k, v in T.iteritems()]))
 
     coarse_feat = T[H['slim_top_lname']][:, :, :, :H['later_feat_channels']]
     assert coarse_feat.op.outputs[0].get_shape()[3] == H['later_feat_channels']
