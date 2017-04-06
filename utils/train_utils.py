@@ -14,6 +14,7 @@ from utils.annolist import AnnotationLib as al
 from utils.rect import Rect
 from utils import tf_concat
 
+
 #def rescale_boxes(current_shape, anno, target_height, target_width):
 def rescale_boxes(current_shape, anno, target_height, target_width, test=False):
     x_scale = target_width / float(current_shape[1])
@@ -35,6 +36,7 @@ def rescale_boxes(current_shape, anno, target_height, target_width, test=False):
         r.y2 *= y_scale
     return anno
 
+	
 def load_idl_tf(idlfile, H, jitter):
     """Take the idlfile and net configuration and create a generator
     that outputs a jittered version of a random image from the annolist
@@ -81,11 +83,13 @@ def load_idl_tf(idlfile, H, jitter):
 
             yield {"image": I, "boxes": boxes, "flags": flags}
 
+			
 def make_sparse(n, d):
     v = np.zeros((d,), dtype=np.float32)
     v[n] = 1.
     return v
 
+	
 def load_data_gen(H, phase, jitter):
     grid_size = H['grid_width'] * H['grid_height']
 
@@ -107,6 +111,7 @@ def load_data_gen(H, phase, jitter):
 
         yield output
 
+		
 def add_rectangles(H, orig_image, confidences, boxes, use_stitching=False, rnn_len=1, min_conf=0.1, show_removed=True, tau=0.25, show_suppressed=True):
     image = np.copy(orig_image[0])
     num_cells = H["grid_height"] * H["grid_width"]
@@ -140,7 +145,6 @@ def add_rectangles(H, orig_image, confidences, boxes, use_stitching=False, rnn_l
     else:
         acc_rects = all_rects_r
 
-
     if show_suppressed:
         pairs = [(all_rects_r, (255, 0, 0))]
     else:
@@ -167,6 +171,7 @@ def add_rectangles(H, orig_image, confidences, boxes, use_stitching=False, rnn_l
 
     return image, rects
 
+	
 def to_x1y1x2y2(box):
     w = tf.maximum(box[:, 2:3], 1)
     h = tf.maximum(box[:, 3:4], 1)
@@ -176,6 +181,7 @@ def to_x1y1x2y2(box):
     y2 = box[:, 1:2] + h / 2
     return tf_concat(1, [x1, y1, x2, y2])
 
+	
 def intersection(box1, box2):
     x1_max = tf.maximum(box1[:, 0], box2[:, 0])
     y1_max = tf.maximum(box1[:, 1], box2[:, 1])
@@ -187,14 +193,17 @@ def intersection(box1, box2):
 
     return x_diff * y_diff
 
+	
 def area(box):
     x_diff = tf.maximum(box[:, 2] - box[:, 0], 0)
     y_diff = tf.maximum(box[:, 3] - box[:, 1], 0)
     return x_diff * y_diff
 
+	
 def union(box1, box2):
     return area(box1) + area(box2) - intersection(box1, box2)
 
+	
 def iou(box1, box2):
     return intersection(box1, box2) / union(box1, box2)
 
@@ -205,6 +214,7 @@ def to_idx(vec, w_shape):
     '''
     return vec[:, 2] + w_shape[2] * (vec[:, 1] + w_shape[1] * vec[:, 0])
 
+	
 def interp(w, i, channel_dim):
     '''
     Input:
@@ -248,6 +258,7 @@ def interp(w, i, channel_dim):
     value = (1 - alpha_ud) * upper_value + (alpha_ud) * lower_value
     return value
 
+	
 def bilinear_select(H, pred_boxes, early_feat, early_feat_channels, w_offset, h_offset):
     '''
     Function used for rezooming high level feature maps. Uses bilinear interpolation

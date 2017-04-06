@@ -52,7 +52,6 @@ def annotation_to_h5(H, a, cell_width, cell_height, max_len):
     return boxes, box_flags
 
 def get_cell_grid(cell_width, cell_height, region_size):
-
     cell_regions = []
     for iy in range(cell_height):
         for ix in range(cell_width):
@@ -65,7 +64,6 @@ def get_cell_grid(cell_width, cell_height, region_size):
             r.track_id = cidx
 
             cell_regions.append(r)
-
 
     return cell_regions
 
@@ -82,7 +80,6 @@ def annotation_jitter(I, a_in, min_box_width=20, jitter_scale_min=0.9, jitter_sc
         except:
             print('bad rectangle')
     a.rects = new_rects
-
 
     if a.rects:
         cur_min_box_width = min([r.width() for r in a.rects])
@@ -116,8 +113,6 @@ def annotation_jitter(I, a_in, min_box_width=20, jitter_scale_min=0.9, jitter_sc
 
     jitter_offset_x = np.random.random_integers(-jitter_offset, jitter_offset)
     jitter_offset_y = np.random.random_integers(-jitter_offset, jitter_offset)
-
-
 
     rescaled_width = I1.shape[1]
     rescaled_height = I1.shape[0]

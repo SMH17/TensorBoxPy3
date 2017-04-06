@@ -8,6 +8,9 @@ import cv2
 import argparse
 import os
 
+print("# TensorBoxPy3: combining frames in a video")
+
+
 # Construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-ext", "--extension", required=False, default='png', help="extension name. default is 'png'.")

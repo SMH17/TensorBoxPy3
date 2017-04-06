@@ -21,12 +21,16 @@ from utils.train_utils import add_rectangles, rescale_boxes
 import cv2
 import argparse
 
+print("# TensorBoxPy3: evaluating result")
+
+
 def get_image_dir(args):
     weights_iteration = int(args.weights.split('-')[-1])
     expname = '_' + args.expname if args.expname else ''
     image_dir = '%s/images_%s_%d%s' % (os.path.dirname(args.weights), os.path.basename(args.test_boxes)[:-5], weights_iteration, expname)
     return image_dir
 
+	
 def get_results(args, H):
     tf.reset_default_graph()
     x_in = tf.placeholder(tf.float32, name='x_in', shape=[H['image_height'], H['image_width'], 3])
@@ -62,6 +66,7 @@ def get_results(args, H):
                 new_img, rects = add_rectangles(H, [img], np_pred_confidences, np_pred_boxes,
                                                 use_stitching=True, rnn_len=H['rnn_len'], min_conf=args.min_conf, tau=args.tau, show_suppressed=args.show_suppressed)
             
+                #rects = [r for r in rects if r.x1<r.x2 and r.y1<r.y2]
                 pred_anno.rects = rects
                 pred_anno.imagePath = os.path.abspath(data_dir)
                 pred_anno = rescale_boxes((H["image_height"], H["image_width"]), pred_anno, orig_img.shape[0], orig_img.shape[1], test=True)
@@ -75,6 +80,7 @@ def get_results(args, H):
                 print(i)
     return pred_annolist, true_annolist
 
+	
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', required=True)
@@ -95,7 +101,6 @@ def main():
     expname = args.expname + '_' if args.expname else ''
     pred_boxes = '%s.%s%s' % (args.weights, expname, os.path.basename(args.test_boxes))
     true_boxes = '%s.gt_%s%s' % (args.weights, expname, os.path.basename(args.test_boxes))
-
 
     pred_annolist, true_annolist = get_results(args, H)
     pred_annolist.save(pred_boxes)

@@ -35,10 +35,14 @@ np.random.seed(0)
 
 from utils import train_utils, googlenet_load, tf_concat
 
+print("# TensorBoxPy3: training")
+
+
 @ops.RegisterGradient("Hungarian")
 def _hungarian_grad(op, *args):
     return map(array_ops.zeros_like, op.inputs)
 
+	
 def build_lstm_inner(H, lstm_input):
     '''
     build lstm decoder
@@ -60,6 +64,7 @@ def build_lstm_inner(H, lstm_input):
             outputs.append(output)
     return outputs
 
+	
 def build_overfeat_inner(H, lstm_input):
     '''
     build simple overfeat decoder
@@ -73,6 +78,7 @@ def build_overfeat_inner(H, lstm_input):
         outputs.append(tf.matmul(lstm_input, w))
     return outputs
 
+	
 def deconv(x, output_shape, channels):
     k_h = 2
     k_w = 2
@@ -81,23 +87,19 @@ def deconv(x, output_shape, channels):
     y = tf.nn.conv2d_transpose(x, w, output_shape, strides=[1, k_h, k_w, 1], padding='VALID')
     return y
 
+	
 def rezoom(H, pred_boxes, early_feat, early_feat_channels, w_offsets, h_offsets):
     '''
     Rezoom into a feature map at multiple interpolation points in a grid.
-
     If the predicted object center is at X, len(w_offsets) == 3, and len(h_offsets) == 5,
     the rezoom grid will look as follows:
-
     [o o o]
     [o o o]
     [o X o]
     [o o o]
     [o o o]
-
     Where each letter indexes into the feature map with bilinear interpolation
     '''
-
-
     grid_size = H['grid_width'] * H['grid_height']
     outer_size = grid_size * H['batch_size']
     indices = []
@@ -124,11 +126,11 @@ def rezoom(H, pred_boxes, early_feat, early_feat_channels, w_offsets, h_offsets)
                        H['rnn_len'],
                        len(w_offsets) * len(h_offsets) * early_feat_channels])
 
+					   
 def build_forward(H, x, phase, reuse):
     '''
     Construct the forward model
     '''
-
     grid_size = H['grid_width'] * H['grid_height']
     outer_size = grid_size * H['batch_size']
     input_mean = 117.
@@ -236,11 +238,11 @@ def build_forward(H, x, phase, reuse):
 
     return pred_boxes, pred_logits, pred_confidences
 
+	
 def build_forward_backward(H, x, phase, boxes, flags):
     '''
     Call build_forward() and then setup the loss functions
     '''
-
     grid_size = H['grid_width'] * H['grid_height']
     outer_size = grid_size * H['batch_size']
     reuse = {'train': None, 'test': True}[phase]
@@ -309,6 +311,7 @@ def build_forward_backward(H, x, phase, boxes, flags):
 
     return pred_boxes, pred_confidences, loss, confidences_loss, boxes_loss
 
+	
 def build(H, q):
     '''
     Build full model for training, including forward / backward passes,
@@ -340,7 +343,6 @@ def build(H, q):
         x, confidences, boxes = q[phase].dequeue_many(arch['batch_size'])
         flags = tf.argmax(confidences, 3)
 
-
         grid_size = H['grid_width'] * H['grid_height']
 
         (pred_boxes, pred_confidences,
@@ -348,7 +350,6 @@ def build(H, q):
          boxes_loss[phase]) = build_forward_backward(H, x, phase, boxes, flags)
         pred_confidences_r = tf.reshape(pred_confidences, [H['batch_size'], grid_size, H['rnn_len'], arch['num_classes']])
         pred_boxes_r = tf.reshape(pred_boxes, [H['batch_size'], grid_size, H['rnn_len'], 4])
-
 
         # Set up summary operations for tensorboard
         a = tf.equal(tf.argmax(confidences[:, :, 0, :], 2), tf.argmax(pred_confidences_r[:, :, 0, :], 2))
@@ -396,8 +397,6 @@ def build(H, q):
                                                     use_stitching=True,
                                                     rnn_len=H['rnn_len'])
 
-                
-
                 num_images = 10
                 img_path = os.path.join(H['save_dir'], '%s_%s.jpg' % ((np_global_step / H['logging']['display_iter']) % num_images, pred_or_true))
                 misc.imsave(img_path, merged[0])
@@ -417,12 +416,11 @@ def build(H, q):
     return (config, loss, accuracy, summary_op, train_op,
             smooth_op, global_step, learning_rate)
 
-
+			
 def train(H, test_images):
     '''
     Setup computation graph, run 2 prefetch data threads, and then run the main loop
     '''
-
     if not os.path.exists(H['save_dir']): os.makedirs(H['save_dir'])
 
     ckpt_file = H['save_dir'] + '/save.ckpt'
@@ -526,7 +524,7 @@ def train(H, test_images):
             if global_step.eval() % H['logging']['save_iter'] == 0 or global_step.eval() == max_iter - 1:
                 saver.save(sess, ckpt_file, global_step=global_step)
 
-
+				
 def main():
     '''
     Parse command line arguments and return the hyperparameter dictionary H.

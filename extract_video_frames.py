@@ -6,6 +6,10 @@ import sys
 import cv2
 
 print(cv2.__version__)
+
+print("# TensorBoxPy3: extracting video frames")
+
+
 if len(sys.argv) < 2:
     print("Wrong param, try something like:  yourvideofile.mp4")
     exit()

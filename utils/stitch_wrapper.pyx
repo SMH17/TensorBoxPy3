@@ -10,6 +10,7 @@ cdef extern from "stitch_rects.hpp":
         int height_
         float confidence_
         float true_confidence_
+        #int classID_
 
     cdef void filter_rects(vector[vector[vector[Rect] ] ]& all_rects,
                       vector[Rect]* stitched_rects,
@@ -45,6 +46,7 @@ def stitch_rects(all_rects, tau=0.25):
                         py_rect.width,
                         py_rect.height,
                         py_rect.confidence)
+                        #py_rect.classID
                     )
 
     cdef vector[Rect] acc_rects;
@@ -81,6 +83,7 @@ def stitch_rects(all_rects, tau=0.25):
             acc_rects[i].width_,
             acc_rects[i].height_,
             acc_rects[i].confidence_)
+            #acc_rects[i].classID_
         acc_rect.true_confidence = acc_rects[i].true_confidence_
         py_acc_rects.append(acc_rect)
     return py_acc_rects

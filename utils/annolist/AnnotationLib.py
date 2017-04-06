@@ -24,13 +24,7 @@ try:
 except ImportError:
     pass
 
-
-################################################
-#
 #  TODO: check distance function
-#
-################################################
-
 
 def cmpAnnoRectsByScore(r1, r2):
     return cmp(r1.score, r2.score)
@@ -40,7 +34,6 @@ def cmpAnnoRectsByScoreDescending(r1, r2):
 
 def cmpDetAnnoRectsByScore(r1, r2):
     return cmp(r1.rect.score, r2.rect.score);
-
 
 def suffixMatch(fn1, fn2):
     l1 = len(fn1);
@@ -75,7 +68,7 @@ class AnnoList(MutableSequence):
         _adesc = AnnoList_pb2.AttributeDesc();
         _adesc.name = name;
         if self.attribute_desc:
-            _adesc.id = max((self.attribute_desc[d].id for d in self.attribute_desc)) + 1;
+            _adesc.id = max(self.attribute_desc[d].id for d in self.attribute_desc) + 1;
         else:
             _adesc.id = 0;
 
@@ -89,7 +82,7 @@ class AnnoList(MutableSequence):
             print("unknown attribute type: {}".format(dtype))
             assert(False);
     
-        #print "adding attribute: {}, id: {}, type: {}".format(_adesc.name, _adesc.id, _adesc.dtype);
+        print("adding attribute: {}, id: {}, type: {}".format(_adesc.name, _adesc.id, _adesc.dtype))
         self.attribute_desc[name] = _adesc;
 
     def add_attribute_val(self, aname, vname, val):
@@ -97,7 +90,7 @@ class AnnoList(MutableSequence):
         assert(aname in self.attribute_desc);
 
         # check and add if new 
-        if all((val_desc.id != val for val_desc in self.attribute_desc[aname].val_to_str)):
+        if all(val_desc.id != val for val_desc in self.attribute_desc[aname].val_to_str):
             val_desc = self.attribute_desc[aname].val_to_str.add()
             val_desc.id = val;
             val_desc.s = vname;
@@ -152,7 +145,6 @@ class AnnoList(MutableSequence):
         list_idx = len(self._list)
         self.insert(list_idx, val)
 
-
 def is_compatible_attr_type(protobuf_type, attr_type):
     if protobuf_type == AnnoList.TYPE_INT32:
         return (attr_type == int);
@@ -162,7 +154,6 @@ def is_compatible_attr_type(protobuf_type, attr_type):
         return (attr_type == str);
     else:
         assert(false);
-
 
 def protobuf_type_to_python(protobuf_type):
     if protobuf_type == AnnoList.TYPE_INT32:
@@ -276,6 +267,8 @@ class AnnoRect(object):
         
         if (self.score != -1):
             jdoc["score"] = self.score
+        #if (self.classID != -1):
+            #jdoc["classID"] = self.classID
         return jdoc
 
     def sortCoords(self):
@@ -302,7 +295,6 @@ class AnnoRect(object):
         self.x2 = (centerX + (w/2.0)*factor)
         self.y2 = (centerY + (h/2.0)*factor_y)
         
-
     def intersection(self, other):
         self.sortCoords()
         other.sortCoords()
@@ -378,11 +370,11 @@ class AnnoRect(object):
         overlap = self.cover(other)
         dist = self.distance(other, aspectRatio, fixWH)
 
-        #if(self.width() == 24 ):
-        #print cover, " ", overlap, " ", dist
-        #print coverThresh, overlapThresh, distThresh
-        #print (cover>=coverThresh and overlap>=overlapThresh and dist<=distThresh)
-        
+        if(self.width() == 24 ):
+            print(cover, " ", overlap, " ", dist)
+            print(coverThresh, overlapThresh, distThresh)
+            print(cover>=coverThresh and overlap>=overlapThresh and dist<=distThresh)
+		    
         if (cover>=coverThresh and overlap>=overlapThresh and dist<=distThresh and self.classID == other.classID):
             return 1
         else:
@@ -473,7 +465,6 @@ class AnnoRect(object):
         node.appendChild(rect_el)
 
 
-
 class Annotation(object):
 
     def __init__(self):
@@ -494,7 +485,7 @@ class Annotation(object):
         return os.path.join(self.imagePath, self.imageName)
 
     def printContent(self):
-        #print "Name: ", self.imageName
+        print("Name: ", self.imageName)
         for rect in self.rects:
             rect.printContent()
 
@@ -558,8 +549,7 @@ class detAnnoRect:
         self.imageIndex = -1
         self.boxIndex = -1
 
-#####################################################################
-### Parsing
+# Parsing
 
 def parseTii(filename):
 
@@ -605,7 +595,7 @@ def parseTii(filename):
                     rect.x2 = float(aNode.firstChild.data)
                     aNode = vehicle.getAttributeNode( orientation+"_BottomRight_Y")
                     rect.y2 = float(aNode.firstChild.data)
-                    #print "pedestrian:", anno.imageName, rect.x1, rect.y1, rect.x2, rect.y2
+                    print("target:", anno.imageName, rect.x1, rect.y1, rect.x2, rect.y2)
                     anno.rects.append(rect)
 
         annotations.append(anno)
@@ -678,12 +668,12 @@ def parseXML(filename):
             for articulation in annoRect.getElementsByTagName("articulation"):
                 for id in articulation.getElementsByTagName("id"):
                     rect.articulations.append(int(id.firstChild.data))
-                #print "Articulations: ", rect.articulations
+                print("Articulations: ", rect.articulations)
 
             for viewpoint in annoRect.getElementsByTagName("viewpoint"):
                 for id in viewpoint.getElementsByTagName("id"):
                     rect.viewpoints.append(int(id.firstChild.data))
-                    #print "Viewpoints: ", rect.viewpoints
+                    print("Viewpoints: ", rect.viewpoints)
                     
             for d in annoRect.getElementsByTagName("D3"):
                 for id in d.getElementsByTagName("id"):
@@ -692,7 +682,7 @@ def parseXML(filename):
             for silhouette in annoRect.getElementsByTagName("silhouette"):
                 for id in silhouette.getElementsByTagName("id"):
                     rect.silhouetteID = int(id.firstChild.data)
-                #print "SilhouetteID: ", rect.silhouetteID
+                print("SilhouetteID: ", rect.silhouetteID)
 
             for annoPoints in annoRect.getElementsByTagName("annopoints"):                          
                 for annoPoint in annoPoints.getElementsByTagName("point"):
@@ -749,7 +739,7 @@ def parseJSON(filename):
     return annotations
     
 def parse(filename, abs_path=False):
-    #print "Parsing: ", filename
+    print("Parsing: ", filename)
     name, ext = os.path.splitext(filename)
     
     if (ext == ".gz" or ext == ".bz2"):
@@ -804,14 +794,14 @@ def parseIDL(filename):
         if (line[-1]=='\n'):
             line = line[:-1]; # remove '\n'
         lineLen = len(line)
-        #print line
+        print(line)
 
         ### get image name
         posImageEnd = line.find('\":')
         if (posImageEnd==-1):
             posImageEnd = line.rfind("\"")
         anno.imageName = line[1:posImageEnd]
-        #print anno.imageName
+        print(anno.imageName)
 
         pos = anno.imageName.rfind("@")
         if (pos >= 0):
@@ -822,7 +812,7 @@ def parseIDL(filename):
         else:
             anno.frameNr = -1
 
-        ### get rect list
+        # get rect list
         # we split by ','. there are 3 commas for each rect and 1 comma seperating the rects
         rectSegs=[]
         if (posImageEnd!=-1 and posImageEnd+4<lineLen):
@@ -836,17 +826,16 @@ def parseIDL(filename):
                 for i in range(0,len(segments),4):
                     rectSeg = segments[i]+","+segments[i+1]+","+segments[i+2]+","+segments[i+3]
                     rectSegs.append(rectSeg)
-                    #print rectSegs
+                    print(rectSegs)
 
             ## parse rect segments
             for rectSeg in rectSegs:
-                #print "RectSeg: ", rectSeg
+                print("RectSeg: ", rectSeg)
                 rect = AnnoRect()
                 posBracket1 = rectSeg.find('(')
                 posBracket2 = rectSeg.find(')')
                 coordinates = rectSeg[posBracket1+1:posBracket2].split(',')
-                #print coordinates
-                #print "Coordinates: ",coordinates                              
+                print("Coordinates: ",coordinates)                              
                 rect.x1 = float(round(float(coordinates[0].strip())))
                 rect.y1 = float(round(float(coordinates[1].strip())))
                 rect.x2 = float(round(float(coordinates[2].strip())))
@@ -858,7 +847,7 @@ def parseIDL(filename):
                 else:
                     rectSeg+="\n"
                 if (posColon!=-1):
-                    #print rectSeg[posColon+1:posSlash]
+                    print(rectSeg[posColon+1:posSlash])
                     rect.score = float(rectSeg[posColon+1:posSlash])
                 anno.rects.append(rect)
 
@@ -867,14 +856,10 @@ def parseIDL(filename):
     return annotations
 
 
-
-    
-
-#####################################################################
-### Saving
+# Saving
 
 def save(filename, annotations):
-    #print "saving: ", filename;
+    print("saving: ", filename)
 
     name, ext = os.path.splitext(filename)
 
@@ -892,7 +877,6 @@ def save(filename, annotations):
 
     elif(ext == ".pal"):
         return PalLib.savePal(filename, PalLib.al2pal(annotations));
-
 
     else:
         assert(False);
@@ -971,9 +955,8 @@ def saveXML(filename, annotations):
     elif(ext == ".bz2"):
         writer = bz2.BZ2File(filename, 'w')
     else:
-        #print "invalid filename - .al(.gz|.bz2) is accepted"
+        print("invalid filename - .al(.gz|.bz2) is accepted")
         return
-
 
     if xml_dom_ext_available:
         xml.dom.ext.PrettyPrint(document, writer)
@@ -985,12 +968,7 @@ def saveXML(filename, annotations):
 
     document.unlink()
 
-
-
-
-
-#####################################################################
-### Statistics
+# Statistics
 
 def getStats(annotations):
     no = 0
@@ -1009,7 +987,7 @@ def getStats(annotations):
                 noSmall=noSmall+1
             heights.append(rect.height())
             if (rect.width()==0):
-                #print "Warning: width=0 in image ", anno.imageName
+                print("Warning: width=0 in image ", anno.imageName)
                 widths.append(1)
             else:
                 widths.append(rect.width())
@@ -1055,21 +1033,18 @@ def getStats(annotations):
         varWidth=float(varWidth)/float(no-1)
 
     ###--- write statistics ---###
-    # print "  Total # rects:", no
-    # print "     avg. Width:", avgWidth, " (", sqrt(varWidth), "standard deviation )"
-    # print "    avg. Height:", avgHeight, " (", sqrt(varHeight), "standard deviation )"
-    # print "     tiny rects:", noTiny, " (< 36 pixels)"
-    # print "    small rects:", noSmall, " (< 128 pixels)"
-    # print "    minimum height:", minHeight
-    # print "    maximum height:", maxHeight
+    print("Total # rects:", no)
+    print("avg. Width:", avgWidth, " (", sqrt(varWidth), "standard deviation )")
+    print("avg. Height:", avgHeight, " (", sqrt(varHeight), "standard deviation )")
+    print("tiny rects:", noTiny, " (< 36 pixels)")
+    print("small rects:", noSmall, " (< 128 pixels)")
+    print("minimum height:", minHeight)
+    print("maximum height:", maxHeight)
 
     ###--- return ---###
     return [widths, heights]
 
-############################################################
-##
-##  IDL merging
-##
+# IDL merging
 
 def mergeIDL(detIDL, det2IDL, detectionFuse= True, minOverlap = 0.5):
     mergedIDL = []
@@ -1107,12 +1082,8 @@ def mergeIDL(detIDL, det2IDL, detectionFuse= True, minOverlap = 0.5):
 
     return mergedIDL
 
-
-############################################################################33
-#
 # Function to force the aspect ratio of annotations to ratio = width / height
-#
-#
+
 def forceAspectRatio(annotations, ratio, KeepHeight = False, KeepWidth = False):
     for anno in annotations:
         for rect in anno.rects:
@@ -1210,11 +1181,8 @@ def extractSubSet(gtIDL, detIDL):
 
     return (filteredIDL     , missingRecallIDL)
 
-###########################################################
-#
 #  Function to remove all detections with a too low score
-#
-#
+
 def filterMinScore(detections, minScore):
     newDetections = []
     for anno in detections:
@@ -1246,7 +1214,6 @@ if __name__ == "__main__":
     idl[0].rects[0].viewpoints = [2,3]
     saveXML("", idl)
 
-
 def annoAnalyze(detIDL):
     allRects = []
     
@@ -1270,5 +1237,3 @@ def annoAnalyze(detIDL):
         filteredIDL.append(a)
         
     return filteredIDL
-
-

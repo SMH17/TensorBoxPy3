@@ -1,6 +1,7 @@
 # TensorBoxPy3 https://github.com/SMH17/TensorBoxPy3
 
 class Rect(object):
+    #def __init__(self, cx, cy, width, height, confidence,  classID):
     def __init__(self, cx, cy, width, height, confidence):
         self.cx = cx
         self.cy = cy
@@ -8,6 +9,7 @@ class Rect(object):
         self.height = height
         self.confidence = confidence
         self.true_confidence = confidence
+        #self.classID = classID
     def overlaps(self, other):
         if abs(self.cx - other.cx) > (self.width + other.width) / 1.5:
             return False

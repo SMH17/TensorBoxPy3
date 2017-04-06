@@ -28,7 +28,7 @@ def al2pal(annotations):
     # check type of attributes, add missing attributes
     for a in annotations:
         for r in a.rects:
-            for k, v in r.at.iteritems():
+            for k, v in r.at.items():
                 if not k in annotations.attribute_desc:
                     annotations.add_attribute(k, type(v));
                 else:
@@ -37,7 +37,7 @@ def al2pal(annotations):
     # check attributes values
     for a in annotations:
         for r in a.rects:
-            for k, v in r.at.iteritems():
+            for k, v in r.at.items():
                 if k in annotations.attribute_val_to_str:
                     # don't allow undefined values
                     if not v in annotations.attribute_val_to_str[k]:
@@ -45,7 +45,7 @@ def al2pal(annotations):
                         assert(False);
 
     # store attribute descriptions in pal structure
-    for aname, adesc in annotations.attribute_desc.iteritems():
+    for aname, adesc in annotations.attribute_desc.items():
         _annolist.attribute_desc.extend([adesc]);
 
     for a in annotations:
@@ -69,7 +69,7 @@ def al2pal(annotations):
                 _r.track_id = r.track_id;
 
             if hasattr(r, 'at'):
-                for k, v in r.at.items():
+                for k, v in list(r.at.items()):
                     _at = _r.attribute.add();
 
                     _at.id = annotations.attribute_desc[k].id;
@@ -99,8 +99,8 @@ def pal2al(_annolist):
         for valdesc in adesc.val_to_str:
             annotations.add_attribute_val(adesc.name, valdesc.s, valdesc.id);
 
-    attribute_name_from_id = {adesc.id: aname for aname, adesc in annotations.attribute_desc.iteritems()}
-    attribute_dtype_from_id = {adesc.id: adesc.dtype for aname, adesc in annotations.attribute_desc.iteritems()}
+    attribute_name_from_id = {adesc.id: aname for aname, adesc in annotations.attribute_desc.items()}
+    attribute_dtype_from_id = {adesc.id: adesc.dtype for aname, adesc in annotations.attribute_desc.items()}
 
     for _a in _annolist.annotation:
         anno = AnnotationLib.Annotation()
