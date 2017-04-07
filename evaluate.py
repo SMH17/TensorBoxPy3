@@ -6,6 +6,8 @@
 #e.g. python3 evaluate.py --weights output/overfeat_rezoom_2017_01_17_15.20/save.ckpt-130000 --test_boxes data/brainwash/
 #will use the train checkpoints saved by train.py in file save.ckpt-130000 located in 
 #the output folder overfeat_rezoom_2017_01_17_15.20 after 130000 iterations.
+#Note that, the predictions come in a 15x20 grid. For each cell in the grid, 
+#you get a confidence in [0,1], and 4 numbers, corresponding to center_y, center_x, height, and width.
 
 import tensorflow as tf
 import os

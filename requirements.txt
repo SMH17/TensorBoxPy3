@@ -10,6 +10,7 @@ opencv-python 3.2.0.6
 scipy 0.19.0
 Pillow 2.6.0
 matplotlib 2.0
+cuDNN 5.1
 
 If you don't want to build manually c dependencies, the make script requires:
 pkgconf 0.9.12
@@ -17,4 +18,4 @@ python3-pkgconfig 1.1.0
 libpython3-dev 3.5
 
 The version number indicates what release has been tested, 
-you can use more updated versions of these libs at your risk.
+you can use more updated or older versions of these libs at your risk.

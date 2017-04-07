@@ -4,7 +4,9 @@
 #
 #Predictions could be made in two ways: command line or service. 
 #For service you can call :func:`initialize` once and call :func:`hot_predict` 
-#as many times as it needed to. You have to provide image, weights and hypes paths
+#as many times as it needed to. You have to provide image, weights resulting 
+#of Tensorbox training and the related hype file
+#e.g. python3 predict.py data/target.jpg output/overfeat_rezoom_2017_01_06_21.07/save.ckpt-999 hypes/overfeat_rezoom.json                          
 
 import tensorflow as tf
 import os, json, subprocess
@@ -53,7 +55,7 @@ def initialize(weights_path, hypes_path, options):
 
     saver = tf.train.Saver()
     sess = tf.Session()
-    sess.run(tf.initialize_all_variables())
+    sess.run(tf.global_variables_initializer())
     saver.restore(sess, weights_path)
     return {'sess': sess, 'pred_boxes': pred_boxes, 'pred_confidences': pred_confidences, 'x_in': x_in, 'hypes': H}
 
@@ -142,12 +144,13 @@ def main():
     
     (options, args) = parser.parse_args()
     if len(args) < 3:
-        print ('Provide image, weights and hypes paths')
+        print ('Provide image(target.jpg), weights(save.ckpt) and hypes(hype.json) paths')
         return
 
     init_params = initialize(args[1], args[2], options.__dict__)
     pred_anno = hot_predict(args[0], init_params, options.__dict__)
     save_results(args[0], pred_anno)
+    print("Prediction output saved in the same folder of:",args[0])
 
 if __name__ == '__main__':
     main()
