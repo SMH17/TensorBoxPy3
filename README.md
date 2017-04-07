@@ -14,11 +14,11 @@ Please check requirements file before try to run.
 Before run, compile stitch_wrapper with: 
     $ cd utils && make && cd ..
 
-If you want to use lstm:
--add cuDNN to your path, in Linux put the libcudnn*.so files on your LD_LIBRARY_PATH e.g.
+If you want to use lstm: 
+add cuDNN to your path, in Linux put the libcudnn*.so files on your LD_LIBRARY_PATH e.g. 
     $ cp /path/to/appropriate/cudnn/lib64/* /usr/local/cuda/lib64
--compile also libhungarian with:
-    $ cd utils && make && make hungarian && cd ..
+compile also libhungarian with: 
+    $ cd utils && make && make hungarian && cd .. 
 
 The original ReadMe.md file is shown below.
 ---
