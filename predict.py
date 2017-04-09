@@ -1,12 +1,13 @@
 # TensorBoxPy3 https://github.com/SMH17/TensorBoxPy3
 
-#This file is designed for prediction of bounding boxes for a single image.
-#
+#This file is designed for prediction of bounding boxes of target object. 
 #Predictions could be made in two ways: command line or service. 
 #For service you can call :func:`initialize` once and call :func:`hot_predict` 
-#as many times as it needed to. You have to provide image, weights resulting 
-#of Tensorbox training and the related hype file
-#e.g. python3 predict.py data/target.jpg output/overfeat_rezoom_2017_01_06_21.07/save.ckpt-999 hypes/overfeat_rezoom.json                          
+#as many times as it needed to. 
+#To use you have to provide image or a folder of images to analize, 
+#weights resulting of Tensorbox training, and the related hype file.
+#e.g. python3 predict.py data/mypicture.jpg output/overfeat_rezoom_2017_01_06_21.07/save.ckpt-999 hypes/overfeat_rezoom.json                          
+#e.g. python3 predict.py data/imagefolderpicturesfolder output/overfeat_rezoom_2017_01_06_21.07/save.ckpt-999 hypes/overfeat_rezoom.json  
 
 import tensorflow as tf
 import os, json, subprocess
@@ -123,14 +124,23 @@ def save_results(image_path, anno):
     new_img = Image.open(image_path)
     d = ImageDraw.Draw(new_img)
     for r in anno.rects:
-        d.rectangle([r.left(), r.top(), r.right(), r.bottom()], outline=(255, 0, 0))
+        d.rectangle([r.left(), r.top(), r.right(), r.bottom()], outline=(0, 255, 0))
+    detections_count=len(anno.rects)
+    if detections_count>0:
+        print("Number of target detections:", detections_count)
+    else:
+        print("Target hasn't been detected.")
 
     # save
-    fpath = os.path.join(os.path.dirname(image_path), 'result.png')
+    output_path=os.path.dirname(image_path)+os.path.sep+'output'
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+
+    fpath = os.path.join(output_path, os.path.basename(image_path)+'_result.png')
     new_img.save(fpath)
     subprocess.call(['chmod', '777', fpath])
 
-    fpath = os.path.join(os.path.dirname(image_path), 'result.json')
+    fpath = os.path.join(output_path, os.path.basename(image_path)+'_result.json')
     al.saveJSON(fpath, anno)
     subprocess.call(['chmod', '777', fpath])
 
@@ -144,12 +154,24 @@ def main():
     
     (options, args) = parser.parse_args()
     if len(args) < 3:
-        print ('Provide image(target.jpg), weights(save.ckpt) and hypes(hype.json) paths')
+        print ('You have to provide 3 parameters: image or image directory, weights(save.ckpt) and hypes(hype.json) paths')
         return
 
     init_params = initialize(args[1], args[2], options.__dict__)
-    pred_anno = hot_predict(args[0], init_params, options.__dict__)
-    save_results(args[0], pred_anno)
+    if os.path.isdir(args[0]):
+        print("Detecting target in all the pictures...")
+        for filename in os.listdir(args[0]):
+            if filename.endswith(".jpg") or filename.endswith(".png"):
+                current_image=os.path.join(args[0], filename)
+                print("Detecting target in the picture:", filename)
+                pred_anno = hot_predict(current_image, init_params, options.__dict__)
+                save_results(current_image, pred_anno)
+            else:
+                print("Skipped file:",os.path.join(args[0], filename))
+    else:
+        print("Detecting target in the picture...")
+        pred_anno = hot_predict(args[0], init_params, options.__dict__)
+        save_results(args[0], pred_anno)
     print("Prediction output saved in the same folder of:",args[0])
 
 if __name__ == '__main__':
