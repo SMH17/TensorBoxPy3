@@ -2,14 +2,14 @@ Install these packages using pip if you have only a Python 3 pip
 or pip3 in case you have both configurations:
 python 3.5
 python3-tk 3.5
-tensorflow 1.0.1
+tensorflow 1.1.0
 Cython 0.25.2
 numpy 1.12.1
-runcython3 0.2.5
-opencv-python 3.2.0.6
+runcython3 0.2.7
+opencv-python 3.2.0.7
 scipy 0.19.0
-Pillow 2.6.0
-matplotlib 2.0
+Pillow 4.1.1
+matplotlib 2.0.2
 cuDNN 5.1
 
 If you don't want to build manually c dependencies, the make script requires:
@@ -17,5 +17,5 @@ pkgconf 0.9.12
 python3-pkgconfig 1.1.0
 libpython3-dev 3.5
 
-The version number indicates what release has been tested, 
+The version number indicates what release has been tested,
 you can use more updated or older versions of these libs at your risk.

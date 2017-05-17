@@ -1,7 +1,7 @@
 # TensorBoxPy3 https://github.com/SMH17/TensorBoxPy3
 
 #Train TensorBoxPy3 using the configuration in the hypes file passed
-#you have to pass hype file and output folder, additionally you can explicit 
+#you have to pass hype file and output folder, additionally you can explicit
 #the weights, the number of train steps with --max_iter and GPU configuration with --gpu
 #e.g. python3 train.py --hypes hypes/overfeat_rezoom.json --gpu 0 --max_iter 5000 --logdir output
 #will train model using overfeat_rezoom.json with 5000 iterations using GPU 0
@@ -34,7 +34,7 @@ random.seed(0)
 np.random.seed(0)
 
 from utils import train_utils, googlenet_load, tf_concat
-
+# from inception.inception_model import inference (for inception v3 beta)
 print("# TensorBoxPy3: training")
 
 
@@ -42,16 +42,16 @@ print("# TensorBoxPy3: training")
 def _hungarian_grad(op, *args):
     return map(array_ops.zeros_like, op.inputs)
 
-	
+
 def build_lstm_inner(H, lstm_input):
     '''
     build lstm decoder
     '''
-    lstm_cell = rnn_cell.BasicLSTMCell(H['lstm_size'], forget_bias=0.0, state_is_tuple=True)
+    lstm_cells = [rnn_cell.BasicLSTMCell(H['lstm_size'], forget_bias=0.0, state_is_tuple=True) for i in range(H['num_lstm_layers'])]
     if H['num_lstm_layers'] > 1:
-        lstm = rnn_cell.MultiRNNCell([lstm_cell] * H['num_lstm_layers'], state_is_tuple=True)
+        lstm = rnn_cell.MultiRNNCell(lstm_cells, state_is_tuple=True)
     else:
-        lstm = lstm_cell
+        lstm = lstm_cell[0]
 
     batch_size = H['batch_size'] * H['grid_height'] * H['grid_width']
     state = lstm.zero_state(batch_size, tf.float32)
@@ -64,7 +64,7 @@ def build_lstm_inner(H, lstm_input):
             outputs.append(output)
     return outputs
 
-	
+
 def build_overfeat_inner(H, lstm_input):
     '''
     build simple overfeat decoder
@@ -78,7 +78,7 @@ def build_overfeat_inner(H, lstm_input):
         outputs.append(tf.matmul(lstm_input, w))
     return outputs
 
-	
+
 def deconv(x, output_shape, channels):
     k_h = 2
     k_w = 2
@@ -87,7 +87,7 @@ def deconv(x, output_shape, channels):
     y = tf.nn.conv2d_transpose(x, w, output_shape, strides=[1, k_h, k_w, 1], padding='VALID')
     return y
 
-	
+
 def rezoom(H, pred_boxes, early_feat, early_feat_channels, w_offsets, h_offsets):
     '''
     Rezoom into a feature map at multiple interpolation points in a grid.
@@ -126,7 +126,7 @@ def rezoom(H, pred_boxes, early_feat, early_feat_channels, w_offsets, h_offsets)
                        H['rnn_len'],
                        len(w_offsets) * len(h_offsets) * early_feat_channels])
 
-					   
+
 def build_forward(H, x, phase, reuse):
     '''
     Construct the forward model
@@ -238,7 +238,42 @@ def build_forward(H, x, phase, reuse):
 
     return pred_boxes, pred_logits, pred_confidences
 
-	
+# for inception v3
+# def build_overfeat_forward(H, x, phase):
+    # input_mean = 117.
+    # x -= input_mean
+
+#
+    # k = H['arch']['num_classes']
+    # dense_layer_num_output = [k, 4]
+    # features_dim = 2048
+    # with tf.variable_scope('inception_v3') as scope:
+      # W = [
+          # tf.get_variable('softmax/weights_{}'.format(i), initializer=tf.truncated_normal([features_dim, dense_layer_num_output[i]], stddev=0.001))
+          # for i in range(2)
+      # ]
+
+#
+      # B = [
+          # tf.get_variable('softmax/biases_{}'.format(i), initializer=tf.random_normal([dense_layer_num_output[i]], stddev=0.001))
+          # for i in range(2)
+      # ]
+
+#
+    # logits, endpoints = inference(images=x, num_classes=2, for_training=True, restore_logits=True)
+    # tf.get_variable_scope().reuse_variables()
+    # mixed5b = endpoints['mixed_8x8x2048b'] # right before avgpool layer
+    # mixed5b = tf.reshape(mixed5b, [H['arch']['batch_size'] * H['arch']['grid_width'] * H['arch']['grid_height'], features_dim])
+    # grid_size = H['arch']['grid_width'] * H['arch']['grid_height']
+    # pred_logits = tf.reshape(tf.nn.xw_plus_b(mixed5b, W[0], B[0],
+                                             # name=phase+'/logits_0'),
+                             # [H['arch']['batch_size'] * grid_size, H['arch']['num_classes']])
+    # pred_confidences = tf.nn.softmax(pred_logits)
+    # pred_boxes = tf.reshape(tf.nn.xw_plus_b(mixed5b, W[1], B[1],
+                                            # name=phase+'/logits_1'),
+                            # [H['arch']['batch_size'] * grid_size, 1, 4]) * 100
+    # return pred_boxes, pred_logits, pred_confidences
+
 def build_forward_backward(H, x, phase, boxes, flags):
     '''
     Call build_forward() and then setup the loss functions
@@ -311,7 +346,7 @@ def build_forward_backward(H, x, phase, boxes, flags):
 
     return pred_boxes, pred_confidences, loss, confidences_loss, boxes_loss
 
-	
+
 def build(H, q):
     '''
     Build full model for training, including forward / backward passes,
@@ -416,7 +451,7 @@ def build(H, q):
     return (config, loss, accuracy, summary_op, train_op,
             smooth_op, global_step, learning_rate)
 
-			
+
 def train(H, test_images):
     '''
     Setup computation graph, run 2 prefetch data threads, and then run the main loop
@@ -524,7 +559,7 @@ def train(H, test_images):
             if global_step.eval() % H['logging']['save_iter'] == 0 or global_step.eval() == max_iter - 1:
                 saver.save(sess, ckpt_file, global_step=global_step)
 
-				
+
 def main():
     '''
     Parse command line arguments and return the hyperparameter dictionary H.
