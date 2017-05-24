@@ -6,7 +6,7 @@ mkdir data
 cd data\
 powershell -Command "Invoke-WebRequest http://download.tensorflow.org/models/inception_v2_2016_08_28.tar.gz  -OutFile inception_v2.tar.gz"
 powershell -Command "Invoke-WebRequest http://download.tensorflow.org/models/resnet_v2_152_2017_04_14tar.gz -OutFile resnet_v2.tar.gz"
-mkdir overfeat_rezoom
+mkdir inception_rezoom
 echo "Extracting Inception v2 pretrained data..."
 tar xf inception_v2_2016_08_28.tar.gz
 echo "Extracting Resnet v2 pretrained data..."

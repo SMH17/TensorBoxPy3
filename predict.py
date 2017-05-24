@@ -1,13 +1,13 @@
 # TensorBoxPy3 https://github.com/SMH17/TensorBoxPy3
 
-#This file is designed for prediction of bounding boxes of target object. 
-#Predictions could be made in two ways: command line or service. 
-#For service you can call :func:`initialize` once and call :func:`hot_predict` 
-#as many times as it needed to. 
-#To use you have to provide image or a folder of images to analize, 
+#This file is designed for prediction of bounding boxes of target object.
+#Predictions could be made in two ways: command line or service.
+#For service you can call :func:`initialize` once and call :func:`hot_predict`
+#as many times as it needed to.
+#To use you have to provide image or a folder of images to analize,
 #weights resulting of Tensorbox training, and the related hype file.
-#e.g. python3 predict.py data/mypicture.jpg output/overfeat_rezoom_2017_01_06_21.07/save.ckpt-999 hypes/overfeat_rezoom.json                          
-#e.g. python3 predict.py data/imagefolderpicturesfolder output/overfeat_rezoom_2017_01_06_21.07/save.ckpt-999 hypes/overfeat_rezoom.json  
+#e.g. python3 predict.py data/mypicture.jpg output/inception_rezoom_2017_01_06_21.07/save.ckpt-999 hypes/inception_rezoom.json                          
+#e.g. python3 predict.py data/imagefolderpicturesfolder output/inception_rezoom_2017_01_06_21.07/save.ckpt-999 hypes/inception_rezoom.json
 
 import tensorflow as tf
 import os, json, subprocess
@@ -24,17 +24,17 @@ print("# TensorBoxPy3: target prediction labeling")
 
 def initialize(weights_path, hypes_path, options):
     """Initialize prediction process.
-     
+
     All long running operations like TensorFlow session start and weights loading are made here.
-     
+
     Args:
-        weights_path (string): The path to the model weights file. 
-        hypes_path (string): The path to the hyperparameters file. 
+        weights_path (string): The path to the model weights file.
+        hypes_path (string): The path to the hyperparameters file.
         options (dict): The options dictionary with parameters for the initialization process.
 
     Returns (dict):
-        The dict object which contains `sess` - TensorFlow session, `pred_boxes` - predicted boxes Tensor, 
-          `pred_confidences` - predicted confidences Tensor, `x_in` - input image Tensor, 
+        The dict object which contains `sess` - TensorFlow session, `pred_boxes` - predicted boxes Tensor,
+          `pred_confidences` - predicted confidences Tensor, `x_in` - input image Tensor,
           `hypes` - hyperparametets dictionary.
     """
 
@@ -62,10 +62,10 @@ def initialize(weights_path, hypes_path, options):
 
 
 def hot_predict(image_path, init_params, options):
-    """Makes predictions when all long running preparation operations are made. 
-    
+    """Makes predictions when all long running preparation operations are made.
+
     Args:
-        image_path (string): The path to the source image. 
+        image_path (string): The path to the source image.
         init_params (dict): The parameters produced by :func:`initialize`.
         options (dict): The options for more precise prediction of bounding boxes.
 
@@ -94,7 +94,7 @@ def hot_predict(image_path, init_params, options):
 
 def prepare_options(hypes_path, options):
     """Sets parameters of the prediction process.
-        
+
     Args:
         hypes_path (string): The path to model hyperparameters file.
         options (dict): The command line options to set before start predictions.
@@ -111,12 +111,12 @@ def prepare_options(hypes_path, options):
 
 def save_results(image_path, anno):
     """Saves results of the prediction.
-    
+
     Args:
         image_path (string): The path to source image to predict bounding boxes.
         anno (Annotation): The predicted annotations for source image.
 
-    Returns: 
+    Returns:
         Nothing.
     """
 
@@ -151,7 +151,7 @@ def main():
     parser.add_option('--tau', action='store', type='float',  default=0.25)
     parser.add_option('--min_conf', action='store', type='float', default=0.2)
     parser.add_option('--show_suppressed', action='store_true', dest='show_suppressed', default=False)
-    
+
     (options, args) = parser.parse_args()
     if len(args) < 3:
         print ('You have to provide 3 parameters: image or image directory, weights(save.ckpt) and hypes(hype.json) paths')

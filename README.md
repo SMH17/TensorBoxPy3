@@ -50,7 +50,7 @@ To combine frames in a video use command:
     $ python3 combine_frames.py -ext jpg -o output.mp4
 
 
-In this example is used Overfeat Rezoom with 20000 iterations and the date of training completion is 17/05/2017 17.10, the names of folders and save.ckpt are generated consequently.
+In this example is used Inception Rezoom with 20000 iterations and the date of training completion is 17/05/2017 17.10, the names of folders and save.ckpt are generated consequently.
 
 ## Tensorboard
 

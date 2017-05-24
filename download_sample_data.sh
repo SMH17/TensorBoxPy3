@@ -14,7 +14,7 @@ echo "Extracting Inception v2  pretrained data..."
 tar xf inception_v2_2016_08_28.tar.gz
 echo "Extracting Resnet v2 pretrained data..."
 tar xf resnet_v2_152_2017_04_14.tar.gz
-mkdir -p overfeat_rezoom
+mkdir -p inception_rezoom
 
 if [[ "$1" == '--travis_tiny_data' ]]; then
     wget --continue http://russellsstewart.com/s/brainwash_tiny.tar.gz
