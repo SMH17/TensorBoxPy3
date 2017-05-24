@@ -16,7 +16,7 @@ def model(x, H, reuse, is_training=True):
                                     reuse=reuse)
     elif H['slim_basename'] == 'resnet_v2_152':
         with slim.arg_scope(resnet.resnet_arg_scope()):
-            _, T = resnet.resnet_v2_101(x,
+            _, T = resnet.resnet_v2_152(x,
                                     is_training=is_training,
                                     num_classes=1001,
                                     reuse=reuse)
