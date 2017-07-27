@@ -68,7 +68,7 @@ def get_results(args, H):
                 new_img, rects = add_rectangles(H, [img], np_pred_confidences, np_pred_boxes,
                                                 use_stitching=True, rnn_len=H['rnn_len'], min_conf=args.min_conf, tau=args.tau, show_suppressed=args.show_suppressed)
 
-                #rects = [r for r in rects if r.x1<r.x2 and r.y1<r.y2]
+                rects = [r for r in rects if r.x1<r.x2 and r.y1<r.y2]
                 pred_anno.rects = rects
                 pred_anno.imagePath = os.path.abspath(data_dir)
                 pred_anno = rescale_boxes((H["image_height"], H["image_width"]), pred_anno, orig_img.shape[0], orig_img.shape[1], test=True)
