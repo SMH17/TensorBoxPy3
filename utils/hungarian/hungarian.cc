@@ -702,7 +702,7 @@ class HungarianOp : public OpKernel {
     for (int i = 0; i < num_pred; ++i) {
       for (int j = 0; j < num_pred; ++j) {
         const int idx = i * num_pred + j;
-        max_pair_cost = std::max(max_pair_cost, fabs(match_cost[idx]));
+        max_pair_cost = std::max(max_pair_cost, (double) fabs(match_cost[idx]));
       }
     }
     const int kMaxNumPred = 20;

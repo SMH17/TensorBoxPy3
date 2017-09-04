@@ -10,9 +10,6 @@ Before run, compile stitch_wrapper with:
     $ cd utils && make && cd ..
 
 If you want to use spatial 2D-LSTM(Long short-term memory) for Recurrent Neural Networks you need additional steps:
-add Nvidia cuDNN to your path, in Linux put the libcudnn*.so files on your LD_LIBRARY_PATH e.g.
-
-    $ cp /path/to/appropriate/cudnn/lib64/* /usr/local/cuda/lib64
 
 compile also libhungarian with:
 
