@@ -34,7 +34,7 @@ def removeAllPatches():
         patch.remove()
     patchCache[:] = []
 
-	
+
 def skip(event):  #called when the skip button is hit
     global filename
     if len(onlyfiles) == 0:
@@ -48,11 +48,11 @@ def skip(event):  #called when the skip button is hit
         bottom_corners[:] = []
         removeAllPatches()
 
-		
+
 def next(event):  #called when the next button is hit
     global filename
     global json_images
-    
+
     rects = []
 
     one_decimal = "{0:0.1f}"
@@ -89,13 +89,13 @@ def next(event):  #called when the next button is hit
         bottom_corners[:] = []
         removeAllPatches()
 
-		
+
 def clear(event): #called when the clear button is hit
     top_corners[:] = []
     bottom_corners[:] = []
     removeAllPatches()
 
-	
+
 def onclick(event):  #called when anywhere inside the window is clicked
     if event.xdata > 1 and event.ydata > 1:
         if (len(top_corners) > len(bottom_corners)):
@@ -108,7 +108,7 @@ def onclick(event):  #called when anywhere inside the window is clicked
         else:
             top_corners.append([event.xdata,event.ydata])
 
-			
+
 def undo(event):  #called when the undo button is hit
     # Only act when a path was drawn
     if (len(top_corners) ==  len(bottom_corners)):

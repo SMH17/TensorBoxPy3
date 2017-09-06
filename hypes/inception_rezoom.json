@@ -1,7 +1,7 @@
 {
     "data": {
-        "train_idl": "./data/images/train_boxes.json",
-        "test_idl": "./data/images/val_boxes.json",
+        "train_idl": "./data/images/train.json",
+        "test_idl": "./data/images/validation.json",
         "truncate_data": false
     },
     "logging": {
