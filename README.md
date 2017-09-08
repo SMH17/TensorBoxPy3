@@ -4,7 +4,7 @@ TensorBox fork by Silvio Marano.
 
 Compared to the original TensorBox release for Python 2.6 and older Tensorflow versions, this fork is aimed to support the newer Python 3.x and latest Tensorflow 1.x versions, in addition It has: additional fixes to avoid crash of evaluation function, Windows support, merges features of others branches not committed in original branch, uses newer neural networks to improve detection, and includes a prediction functions and additional tools to process videos and improves usability.
 More features and utilities will be added in future and the development will continue to diverge from original release update after update, so pay attention if you try to mix code from TensorBoxPy 3 with code of the original branch.
-Please check requirements file before try to run.
+Please check requirements file before trying to run.
 
 Before run, compile stitch_wrapper with:
 
@@ -19,6 +19,7 @@ compile also libhungarian with:
 The current hyperparameters configurations work with Inception v2 and ReInspect(ResNet) v2 as sub-models.
 - Inception is the evolution of GoogLeNet neural network. Inception relies on a network-in-network architecture that uses sub-networks called Inception modules. The goal of the inception module is to act as a multi-level feature extractor to increase learning abilities and abstraction power by having more complex filters that work at different levels.
 - ReInspect uses deep residual networks explicitly reformulating the layers as learning residual functions with reference to the layer inputs, instead of learning unreferenced functions, and relies on micro-architecture modules, using a collection of micro-architecture building blocks along with standard layers (like CONV, POOL, etc.) that together lead to the macro-architecture. ReInspect is a neural network extension designed for high performance object detection in images with heavily overlapping instances.
+
 Both v2 versions of Inception and Resnet sub-models use batch normalization to address covariate shift problem and improve results.
 
 
