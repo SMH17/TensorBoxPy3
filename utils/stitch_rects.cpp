@@ -48,7 +48,7 @@ void filter_rects(const vector<vector<vector<Rect> > >& all_rects,
       
       int num_pred = MAX(current_rects.size(), relevant_rects.size());
 
-      int int_cost[num_pred * num_pred];
+      int *int_cost= new int[num_pred * num_pred];
       for (int k = 0; k < num_pred * num_pred; ++k) { int_cost[k] = 0; }
       for (int k = 0; k < (int)current_rects.size(); ++k) {
         for (int l = 0; l < (int)relevant_rects.size(); ++l) {
@@ -82,6 +82,7 @@ void filter_rects(const vector<vector<vector<Rect> > >& all_rects,
         free(m[i]);
       }
       free(m);
+	  delete [] int_cost;
 
       vector<int> bad;
       for (int k = 0; k < (int)assignment.size(); ++k) {
