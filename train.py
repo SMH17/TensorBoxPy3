@@ -42,16 +42,17 @@ print("# TensorBoxPy3: training")
 def _hungarian_grad(op, *args):
     return map(array_ops.zeros_like, op.inputs)
 
-
 def build_lstm_inner(H, lstm_input):
     '''
     build lstm decoder
     '''
-    lstm_cells = [rnn_cell.BasicLSTMCell(H['lstm_size'], forget_bias=0.0, state_is_tuple=True) for i in range(H['num_lstm_layers'])]
+    def get_lstm():
+        return rnn_cell.BasicLSTMCell(H['lstm_size'], forget_bias=0.0, state_is_tuple=True)
+
     if H['num_lstm_layers'] > 1:
-        lstm = rnn_cell.MultiRNNCell(lstm_cells, state_is_tuple=True)
+        lstm = rnn_cell.MultiRNNCell([get_lstm() for _ in range(H['num_lstm_layers'])], state_is_tuple=True)
     else:
-        lstm = lstm_cell[0]
+        lstm = get_lstm()
 
     batch_size = H['batch_size'] * H['grid_height'] * H['grid_width']
     state = lstm.zero_state(batch_size, tf.float32)
