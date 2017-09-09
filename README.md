@@ -1,6 +1,6 @@
 ## TensorBoxPy3
 
-TensorboxPy3 is based on ReInspect a neural network extension designed for high performance object detection in images with heavily overlapping instances. Compared to the original TensorBox release for Python 2.6 and older Tensorflow versions, TensorBoxPy3 is aimed to support the newer Python 3.x and latest Tensorflow 1.x versions, in addition It has: additional fixes to avoid crash of evaluation function, Windows support, merges features of others branches not committed in original branch, uses newer neural networks to improve detection, and includes a prediction functions and additional tools to process videos and improves usability.
+TensorboxPy3 is based on ReInspect a neural network extension designed for high performance object detection in images with heavily overlapping instances. Compared to the original TensorBox release for Python 2.6 and older Tensorflow versions, TensorBoxPy3 is aimed to support the newer Python 3.x and latest Tensorflow 1.x versions, in addition It has: additional fixes to avoid crashes of evaluation function, Windows support, merges features of others branches not committed in original branch, uses newer neural networks to improve detection, and includes a prediction functions and additional tools to process videos and improves usability.
 More improvements, features and utilities will be added in future and the development will continue to diverge from original release update after update, so pay attention if you try to mix code from TensorBoxPy3 with code of the original branch.
 Please check requirements file before trying to run.
 
@@ -23,7 +23,7 @@ Both v2 versions of Inception and Resnet sub-models use batch normalization to a
 
 ## Usage example:
 
-First of all, you need to define the set of target images where the training tasks have to work. The training needs images labeled with json files that specify what are the target objects bounding boxes. To label images you can pass the images directory to json labeler in this way:
+First of all, you need to define the set of target images where the training tasks have to work. The training needs images labeled with json files that specify what are the target objects bounding boxes. To label images you can pass the images directory to json_labeler in this way:
 
     $ python3 json_labeler.py images
 
@@ -47,8 +47,6 @@ To combine frames in a video use command:
 
     $ python3 combine_frames.py -ext jpg -o output.mp4
 
-
-In this example is used Inception Rezoom with 20000 iterations and the date of training completion is 17/05/2017 17.10, the names of folders and save.ckpt are generated consequently.
 
 ## Tensorboard
 
