@@ -63,4 +63,4 @@ You can visualize the progress of your experiments during training using Tensorb
 ![Screenshot](https://s26.postimg.org/jhglq8edl/charts.png)
 
 TensorBoxPy3 by Silvio Marano, official GitHub repository [here](https://github.com/SMH17/TensorBoxPy3).
-The original project [link](https://github.com/Russell91/ReInspect) [link](https://github.com/Russell91/TensorBox/).
+The original project [cf-link](https://github.com/Russell91/ReInspect) or [tf-link](https://github.com/Russell91/TensorBox/).
