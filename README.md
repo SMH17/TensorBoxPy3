@@ -1,9 +1,7 @@
-## TensorBoxPy 3
+## TensorBoxPy3
 
-TensorBox fork by Silvio Marano.
-
-Compared to the original TensorBox release for Python 2.6 and older Tensorflow versions, this fork is aimed to support the newer Python 3.x and latest Tensorflow 1.x versions, in addition It has: additional fixes to avoid crash of evaluation function, Windows support, merges features of others branches not committed in original branch, uses newer neural networks to improve detection, and includes a prediction functions and additional tools to process videos and improves usability.
-More features and utilities will be added in future and the development will continue to diverge from original release update after update, so pay attention if you try to mix code from TensorBoxPy 3 with code of the original branch.
+TensorboxPy3 is based on ReInspect a neural network extension designed for high performance object detection in images with heavily overlapping instances. Compared to the original TensorBox release for Python 2.6 and older Tensorflow versions, TensorBoxPy3 is aimed to support the newer Python 3.x and latest Tensorflow 1.x versions, in addition It has: additional fixes to avoid crash of evaluation function, Windows support, merges features of others branches not committed in original branch, uses newer neural networks to improve detection, and includes a prediction functions and additional tools to process videos and improves usability.
+More improvements, features and utilities will be added in future and the development will continue to diverge from original release update after update, so pay attention if you try to mix code from TensorBoxPy3 with code of the original branch.
 Please check requirements file before trying to run.
 
 Before run, compile stitch_wrapper with:
@@ -16,9 +14,9 @@ compile also libhungarian with:
 
     $ cd utils && make && make hungarian && cd ..
 
-The current hyperparameters configurations work with Inception v2 and ReInspect(ResNet) v2 as sub-models.
+The current hyperparameters configurations work with Inception v2 and ResNet v2 as sub-models.
 - Inception is the evolution of GoogLeNet neural network. Inception relies on a network-in-network architecture that uses sub-networks called Inception modules. The goal of the inception module is to act as a multi-level feature extractor to increase learning abilities and abstraction power by having more complex filters that work at different levels.
-- ReInspect uses deep residual networks explicitly reformulating the layers as learning residual functions with reference to the layer inputs, instead of learning unreferenced functions, and relies on micro-architecture modules, using a collection of micro-architecture building blocks along with standard layers (like CONV, POOL, etc.) that together lead to the macro-architecture. ReInspect is a neural network extension designed for high performance object detection in images with heavily overlapping instances.
+- Resnet uses deep residual networks explicitly reformulating the layers as learning residual functions with reference to the layer inputs, instead of learning unreferenced functions, and relies on micro-architecture modules, using a collection of micro-architecture building blocks along with standard layers (like CONV, POOL, etc.) that together lead to the macro-architecture.
 
 Both v2 versions of Inception and Resnet sub-models use batch normalization to address covariate shift problem and improve results.
 
@@ -54,7 +52,7 @@ In this example is used Inception Rezoom with 20000 iterations and the date of t
 
 ## Tensorboard
 
-You can visualize the progress of your experiments during training using Tensorboard.
+You can visualize the progress of your experiments during training using Tensorboard. You can do this manually with the follow code, or simply launching the related script.
 
     $ cd /path/to/tensorbox
     $ tensorboard --logdir output
@@ -66,5 +64,5 @@ You can visualize the progress of your experiments during training using Tensorb
 ![Screenshot](https://s26.postimg.org/44wuw7f7t/histogram.png)
 ![Screenshot](https://s26.postimg.org/jhglq8edl/charts.png)
 
-TensorBoxPy 3 official GitHub repository [here](https://github.com/SMH17/TensorBoxPy3).
-The original project [link](https://github.com/Russell91/TensorBox/).
+TensorBoxPy3 by Silvio Marano, official GitHub repository [here](https://github.com/SMH17/TensorBoxPy3).
+The original project [link](https://github.com/Russell91/ReInspect) [link](https://github.com/Russell91/TensorBox/).
