@@ -27,7 +27,7 @@ Both v2 versions of Inception and Resnet sub-models use batch normalization to a
 
 First of all, you need to define the set of target images where the training tasks have to work. The training needs images labeled with json files that specify what are the target objects bounding boxes. To label images you can pass the images directory to json labeler in this way:
 
-    $ python3 make_json.py images
+    $ python3 json_labeler.py images
 
 To extract frames from a video use command:
 

@@ -121,7 +121,7 @@ ax = plt.gca()
 
 #get our files for processing
 if len(sys.argv) < 3:
-    print("Too few params, try something like:  python make_json.py trainfolder640x480 train.json")
+    print("Too few params, try something like:  python json_labeler.py trainfolder640x480 train.json")
     exit()
 path = sys.argv[1]
 outfile_name = sys.argv[2]
