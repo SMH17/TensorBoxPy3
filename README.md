@@ -50,7 +50,7 @@ To combine frames in a video use command:
 
 ## Tensorboard
 
-You can visualize the progress of your experiments during training using Tensorboard. You can do this manually with the follow code, or simply launching the related script.
+You can visualize the progress of your experiments during training using Tensorboard. You can do this manually with the following code, or simply launching the related script.
 
     $ cd /path/to/tensorbox
     $ tensorboard --logdir output
