@@ -62,5 +62,9 @@ You can visualize the progress of your experiments during training using Tensorb
     $ ssh myserver -N -L localhost:6006:localhost:6006
     $ # open localhost:6006 in your browser
 
+![Screenshot](https://s26.postimg.org/i4ywocgy1/graph2.png)
+![Screenshot](https://s26.postimg.org/44wuw7f7t/histogram.png)
+![Screenshot](https://s26.postimg.org/jhglq8edl/charts.png)
+
 TensorBoxPy 3 official GitHub repository [here](https://github.com/SMH17/TensorBoxPy3).
 The original project [link](https://github.com/Russell91/TensorBox/).
