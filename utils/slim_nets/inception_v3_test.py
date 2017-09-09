@@ -41,7 +41,7 @@ class InceptionV3Test(tf.test.TestCase):
                           'MaxPool_5a_3x3', 'Mixed_5b', 'Mixed_5c', 'Mixed_5d',
                           'Mixed_6a', 'Mixed_6b', 'Mixed_6c', 'Mixed_6d',
                           'Mixed_6e', 'Mixed_7a', 'Mixed_7b', 'Mixed_7c']
-    self.assertItemsEqual(list(end_points.keys()), expected_endpoints)
+    self.assertItemsEqual(end_points.keys(), expected_endpoints)
 
   def testBuildOnlyUptoFinalEndpoint(self):
     batch_size = 5
@@ -86,7 +86,7 @@ class InceptionV3Test(tf.test.TestCase):
                         'Mixed_7a': [batch_size, 8, 8, 1280],
                         'Mixed_7b': [batch_size, 8, 8, 2048],
                         'Mixed_7c': [batch_size, 8, 8, 2048]}
-    self.assertItemsEqual(list(endpoints_shapes.keys()), list(end_points.keys()))
+    self.assertItemsEqual(endpoints_shapes.keys(), end_points.keys())
     for endpoint_name in endpoints_shapes:
       expected_shape = endpoints_shapes[endpoint_name]
       self.assertTrue(endpoint_name in end_points)
@@ -135,7 +135,7 @@ class InceptionV3Test(tf.test.TestCase):
     inputs = tf.random_uniform((batch_size, height, width, 3))
     _, end_points = inception.inception_v3(inputs, num_classes)
 
-    endpoint_keys = [key for key in list(end_points.keys())
+    endpoint_keys = [key for key in end_points.keys()
                      if key.startswith('Mixed') or key.startswith('Conv')]
 
     _, end_points_with_multiplier = inception.inception_v3(
@@ -155,7 +155,7 @@ class InceptionV3Test(tf.test.TestCase):
     inputs = tf.random_uniform((batch_size, height, width, 3))
     _, end_points = inception.inception_v3(inputs, num_classes)
 
-    endpoint_keys = [key for key in list(end_points.keys())
+    endpoint_keys = [key for key in end_points.keys()
                      if key.startswith('Mixed') or key.startswith('Conv')]
 
     _, end_points_with_multiplier = inception.inception_v3(
@@ -224,7 +224,7 @@ class InceptionV3Test(tf.test.TestCase):
     with self.test_session() as sess:
       sess.run(tf.global_variables_initializer())
       output = sess.run(logits, {inputs: images.eval()})
-      self.assertEqual(output.shape, (batch_size, num_classes))
+      self.assertEquals(output.shape, (batch_size, num_classes))
 
   def testEvaluation(self):
     batch_size = 2
@@ -239,7 +239,7 @@ class InceptionV3Test(tf.test.TestCase):
     with self.test_session() as sess:
       sess.run(tf.global_variables_initializer())
       output = sess.run(predictions)
-      self.assertEqual(output.shape, (batch_size,))
+      self.assertEquals(output.shape, (batch_size,))
 
   def testTrainEvalWithReuse(self):
     train_batch_size = 5
@@ -257,7 +257,7 @@ class InceptionV3Test(tf.test.TestCase):
     with self.test_session() as sess:
       sess.run(tf.global_variables_initializer())
       output = sess.run(predictions)
-      self.assertEqual(output.shape, (eval_batch_size,))
+      self.assertEquals(output.shape, (eval_batch_size,))
 
   def testLogitsNotSqueezed(self):
     num_classes = 25

@@ -10,6 +10,7 @@ from utils.slim_nets import alexnet
 from utils.slim_nets import cifarnet
 from utils.slim_nets import inception
 from utils.slim_nets import lenet
+from utils.slim_nets import mobilenet_v1
 from utils.slim_nets import overfeat
 from utils.slim_nets import resnet_v1
 from utils.slim_nets import resnet_v2
@@ -37,6 +38,10 @@ networks_map = {'alexnet_v2': alexnet.alexnet_v2,
                 'resnet_v2_101': resnet_v2.resnet_v2_101,
                 'resnet_v2_152': resnet_v2.resnet_v2_152,
                 'resnet_v2_200': resnet_v2.resnet_v2_200,
+                'mobilenet_v1': mobilenet_v1.mobilenet_v1,
+                'mobilenet_v1_075': mobilenet_v1.mobilenet_v1_075,
+                'mobilenet_v1_050': mobilenet_v1.mobilenet_v1_050,
+                'mobilenet_v1_025': mobilenet_v1.mobilenet_v1_025,
                }
 
 arg_scopes_map = {'alexnet_v2': alexnet.alexnet_v2_arg_scope,
@@ -60,6 +65,10 @@ arg_scopes_map = {'alexnet_v2': alexnet.alexnet_v2_arg_scope,
                   'resnet_v2_101': resnet_v2.resnet_arg_scope,
                   'resnet_v2_152': resnet_v2.resnet_arg_scope,
                   'resnet_v2_200': resnet_v2.resnet_arg_scope,
+                  'mobilenet_v1': mobilenet_v1.mobilenet_v1_arg_scope,
+                  'mobilenet_v1_075': mobilenet_v1.mobilenet_v1_arg_scope,
+                  'mobilenet_v1_050': mobilenet_v1.mobilenet_v1_arg_scope,
+                  'mobilenet_v1_025': mobilenet_v1.mobilenet_v1_arg_scope,
                  }
 
 
@@ -82,10 +91,10 @@ def get_network_fn(name, num_classes, weight_decay=0.0, is_training=False):
   """
   if name not in networks_map:
     raise ValueError('Name of network unknown %s' % name)
-  arg_scope = arg_scopes_map[name](weight_decay=weight_decay)
   func = networks_map[name]
   @functools.wraps(func)
   def network_fn(images):
+    arg_scope = arg_scopes_map[name](weight_decay=weight_decay)
     with slim.arg_scope(arg_scope):
       return func(images, num_classes, is_training=is_training)
   if hasattr(func, 'default_image_size'):

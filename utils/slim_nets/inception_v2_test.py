@@ -40,7 +40,7 @@ class InceptionV2Test(tf.test.TestCase):
                           'Mixed_5b', 'Mixed_5c', 'Conv2d_1a_7x7',
                           'MaxPool_2a_3x3', 'Conv2d_2b_1x1', 'Conv2d_2c_3x3',
                           'MaxPool_3a_3x3']
-    self.assertItemsEqual(list(end_points.keys()), expected_endpoints)
+    self.assertItemsEqual(end_points.keys(), expected_endpoints)
 
   def testBuildOnlyUptoFinalEndpoint(self):
     batch_size = 5
@@ -80,7 +80,7 @@ class InceptionV2Test(tf.test.TestCase):
                         'Conv2d_2b_1x1': [batch_size, 56, 56, 64],
                         'Conv2d_2c_3x3': [batch_size, 56, 56, 192],
                         'MaxPool_3a_3x3': [batch_size, 28, 28, 192]}
-    self.assertItemsEqual(list(endpoints_shapes.keys()), list(end_points.keys()))
+    self.assertItemsEqual(endpoints_shapes.keys(), end_points.keys())
     for endpoint_name in endpoints_shapes:
       expected_shape = endpoints_shapes[endpoint_name]
       self.assertTrue(endpoint_name in end_points)
@@ -105,7 +105,7 @@ class InceptionV2Test(tf.test.TestCase):
     inputs = tf.random_uniform((batch_size, height, width, 3))
     _, end_points = inception.inception_v2(inputs, num_classes)
 
-    endpoint_keys = [key for key in list(end_points.keys())
+    endpoint_keys = [key for key in end_points.keys()
                      if key.startswith('Mixed') or key.startswith('Conv')]
 
     _, end_points_with_multiplier = inception.inception_v2(
@@ -125,7 +125,7 @@ class InceptionV2Test(tf.test.TestCase):
     inputs = tf.random_uniform((batch_size, height, width, 3))
     _, end_points = inception.inception_v2(inputs, num_classes)
 
-    endpoint_keys = [key for key in list(end_points.keys())
+    endpoint_keys = [key for key in end_points.keys()
                      if key.startswith('Mixed') or key.startswith('Conv')]
 
     _, end_points_with_multiplier = inception.inception_v2(
@@ -147,6 +147,68 @@ class InceptionV2Test(tf.test.TestCase):
       _ = inception.inception_v2(inputs, num_classes, depth_multiplier=-0.1)
     with self.assertRaises(ValueError):
       _ = inception.inception_v2(inputs, num_classes, depth_multiplier=0.0)
+
+  def testBuildEndPointsWithUseSeparableConvolutionFalse(self):
+    batch_size = 5
+    height, width = 224, 224
+
+    inputs = tf.random_uniform((batch_size, height, width, 3))
+    _, end_points = inception.inception_v2_base(inputs)
+
+    endpoint_keys = [
+        key for key in end_points.keys()
+        if key.startswith('Mixed') or key.startswith('Conv')
+    ]
+
+    _, end_points_with_replacement = inception.inception_v2_base(
+        inputs, use_separable_conv=False)
+
+    # The endpoint shapes must be equal to the original shape even when the
+    # separable convolution is replaced with a normal convolution.
+    for key in endpoint_keys:
+      original_shape = end_points[key].get_shape().as_list()
+      self.assertTrue(key in end_points_with_replacement)
+      new_shape = end_points_with_replacement[key].get_shape().as_list()
+      self.assertListEqual(original_shape, new_shape)
+
+  def testBuildEndPointsNCHWDataFormat(self):
+    batch_size = 5
+    height, width = 224, 224
+
+    inputs = tf.random_uniform((batch_size, height, width, 3))
+    _, end_points = inception.inception_v2_base(inputs)
+
+    endpoint_keys = [
+        key for key in end_points.keys()
+        if key.startswith('Mixed') or key.startswith('Conv')
+    ]
+
+    inputs_in_nchw = tf.random_uniform((batch_size, 3, height, width))
+    _, end_points_with_replacement = inception.inception_v2_base(
+        inputs_in_nchw, use_separable_conv=False, data_format='NCHW')
+
+    # With the 'NCHW' data format, all endpoint activations have a transposed
+    # shape from the original shape with the 'NHWC' layout.
+    for key in endpoint_keys:
+      transposed_original_shape = tf.transpose(
+          end_points[key], [0, 3, 1, 2]).get_shape().as_list()
+      self.assertTrue(key in end_points_with_replacement)
+      new_shape = end_points_with_replacement[key].get_shape().as_list()
+      self.assertListEqual(transposed_original_shape, new_shape)
+
+  def testBuildErrorsForDataFormats(self):
+    batch_size = 5
+    height, width = 224, 224
+
+    inputs = tf.random_uniform((batch_size, height, width, 3))
+
+    # 'NCWH' data format is not supported.
+    with self.assertRaises(ValueError):
+      _ = inception.inception_v2_base(inputs, data_format='NCWH')
+
+    # 'NCHW' data format is not supported for separable convolution.
+    with self.assertRaises(ValueError):
+      _ = inception.inception_v2_base(inputs, data_format='NCHW')
 
   def testHalfSizeImages(self):
     batch_size = 5
@@ -195,7 +257,7 @@ class InceptionV2Test(tf.test.TestCase):
     with self.test_session() as sess:
       sess.run(tf.global_variables_initializer())
       output = sess.run(logits, {inputs: images.eval()})
-      self.assertEqual(output.shape, (batch_size, num_classes))
+      self.assertEquals(output.shape, (batch_size, num_classes))
 
   def testEvaluation(self):
     batch_size = 2
@@ -210,7 +272,7 @@ class InceptionV2Test(tf.test.TestCase):
     with self.test_session() as sess:
       sess.run(tf.global_variables_initializer())
       output = sess.run(predictions)
-      self.assertEqual(output.shape, (batch_size,))
+      self.assertEquals(output.shape, (batch_size,))
 
   def testTrainEvalWithReuse(self):
     train_batch_size = 5
@@ -227,7 +289,7 @@ class InceptionV2Test(tf.test.TestCase):
     with self.test_session() as sess:
       sess.run(tf.global_variables_initializer())
       output = sess.run(predictions)
-      self.assertEqual(output.shape, (eval_batch_size,))
+      self.assertEquals(output.shape, (eval_batch_size,))
 
   def testLogitsNotSqueezed(self):
     num_classes = 25

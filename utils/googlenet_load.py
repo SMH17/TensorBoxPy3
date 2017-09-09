@@ -49,8 +49,13 @@ def model(x, H, reuse, is_training=True):
                                           num_classes=1001,
                                           reuse=reuse)
         slim_attention_lname='Mixed_4a'
-            # print '\n'.join(map(str, [(k, v.op.outputs[0].get_shape()) for k, v in T.iteritems()]))
+    elif H['slim_basename'] == 'MobilenetV1':
+        with slim.arg_scope(mobilenet_v1.mobilenet_v1_arg_scope()):
+            _, T = mobilenet_v1.mobilenet_v1(x,
+                                             is_training=is_training,
+                                             reuse=reuse)
 
+    # print '\n'.join(map(str, [(k, v.op.outputs[0].get_shape()) for k, v in T.iteritems()]))
     coarse_feat = T[H['slim_top_lname']][:, :, :, :H['later_feat_channels']]
     assert coarse_feat.op.outputs[0].get_shape()[3] == H['later_feat_channels']
 
