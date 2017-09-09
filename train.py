@@ -34,7 +34,7 @@ random.seed(0)
 np.random.seed(0)
 
 from utils import train_utils, googlenet_load
-# from inception.inception_model import inference (for inception v3 beta)
+
 print("# TensorBoxPy3: training")
 
 
@@ -239,41 +239,6 @@ def build_forward(H, x, phase, reuse):
 
     return pred_boxes, pred_logits, pred_confidences
 
-# for inception v3
-# def build_overfeat_forward(H, x, phase):
-    # input_mean = 117.
-    # x -= input_mean
-
-#
-    # k = H['arch']['num_classes']
-    # dense_layer_num_output = [k, 4]
-    # features_dim = 2048
-    # with tf.variable_scope('inception_v3') as scope:
-      # W = [
-          # tf.get_variable('softmax/weights_{}'.format(i), initializer=tf.truncated_normal([features_dim, dense_layer_num_output[i]], stddev=0.001))
-          # for i in range(2)
-      # ]
-
-#
-      # B = [
-          # tf.get_variable('softmax/biases_{}'.format(i), initializer=tf.random_normal([dense_layer_num_output[i]], stddev=0.001))
-          # for i in range(2)
-      # ]
-
-#
-    # logits, endpoints = inference(images=x, num_classes=2, for_training=True, restore_logits=True)
-    # tf.get_variable_scope().reuse_variables()
-    # mixed5b = endpoints['mixed_8x8x2048b'] # right before avgpool layer
-    # mixed5b = tf.reshape(mixed5b, [H['arch']['batch_size'] * H['arch']['grid_width'] * H['arch']['grid_height'], features_dim])
-    # grid_size = H['arch']['grid_width'] * H['arch']['grid_height']
-    # pred_logits = tf.reshape(tf.nn.xw_plus_b(mixed5b, W[0], B[0],
-                                             # name=phase+'/logits_0'),
-                             # [H['arch']['batch_size'] * grid_size, H['arch']['num_classes']])
-    # pred_confidences = tf.nn.softmax(pred_logits)
-    # pred_boxes = tf.reshape(tf.nn.xw_plus_b(mixed5b, W[1], B[1],
-                                            # name=phase+'/logits_1'),
-                            # [H['arch']['batch_size'] * grid_size, 1, 4]) * 100
-    # return pred_boxes, pred_logits, pred_confidences
 
 def build_forward_backward(H, x, phase, boxes, flags):
     '''
@@ -357,7 +322,6 @@ def build(H, q):
     solver = H["solver"]
 
     os.environ['CUDA_VISIBLE_DEVICES'] = str(solver.get('gpu', ''))
-
     #gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.8)
     gpu_options = tf.GPUOptions()
     config = tf.ConfigProto(gpu_options=gpu_options)
@@ -463,6 +427,10 @@ def train(H, test_images):
     with open(H['save_dir'] + '/hypes.json', 'w') as f:
         json.dump(H, f, indent=4)
 
+    # this operation is useful if you want to set custom size
+    H["grid_width"] = int(H["image_width"] / H["region_size"])
+    H["grid_height"] = int(H["image_height"] / H["region_size"])
+
     x_in = tf.placeholder(tf.float32)
     confs_in = tf.placeholder(tf.float32)
     boxes_in = tf.placeholder(tf.float32)
@@ -519,9 +487,6 @@ def train(H, test_images):
             init_fn = slim.assign_from_checkpoint_fn(
                   '%s/data/%s' % (os.path.dirname(os.path.realpath(__file__)), H['slim_ckpt']),
                   [x for x in tf.global_variables() if x.name.startswith(H['slim_basename']) and H['solver']['opt'] not in x.name])
-            #init_fn = slim.assign_from_checkpoint_fn(
-                  #'%s/data/inception_v1.ckpt' % os.path.dirname(os.path.realpath(__file__)),
-                  #[x for x in tf.global_variables() if x.name.startswith('InceptionV1') and not H['solver']['opt'] in x.name])
             init_fn(sess)
 
         # train model for N iterations
