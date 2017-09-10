@@ -16,5 +16,9 @@ python3-pkgconfig 1.1.0
 libpython3-dev 3.5
 runcython3 0.2.7
 
+To compile c dependencies on Windows you need:
+cmake 3.9.2
+visual c++ 2017 compiler
+
 The version number indicates latest release tested,
 you can use more updated or older versions of these libs at your risk.
