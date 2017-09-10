@@ -15,9 +15,10 @@ compile also libhungarian with:
     > cd utils && make && make hungarian && cd ..
 
 on Windows use Cmake command:
+
     > cmake -DPYTHON_INCLUDE_DIR=$(python -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") -DPYTHON_LIBRARY=$(python -c "import distutils.sysconfig as sysconfig; print(sysconfig.get_config_var('LIBDIR'))") CMakeLists.txt
 
-to generate a Visual C++ project, then compile It with Visual Studio. 
+to generate a Visual C++ project, then compile It with Visual Studio.
 
 The current hyperparameters configurations work with Inception v2 and ResNet v2 as sub-models.
 - Inception is the evolution of GoogLeNet neural network. Inception relies on a network-in-network architecture that uses sub-networks called Inception modules. The goal of the inception module is to act as a multi-level feature extractor to increase learning abilities and abstraction power by having more complex filters that work at different levels.
