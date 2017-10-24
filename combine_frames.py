@@ -7,9 +7,16 @@
 import cv2
 import argparse
 import os
+import re
 
 print("# TensorBoxPy3: combining frames in a video")
 
+# Map the numeric part to allow numerical sort
+def numericalSortMap(value):
+    numbers = re.compile(r'(\d+)')
+    parts = numbers.split(value)
+    parts[1::2] = map(int, parts[1::2])
+    return parts
 
 # Construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -39,11 +46,11 @@ out = cv2.VideoWriter(output, fourcc, 20.0, (width, height))
 
 print("Video creation in progress...")
 count=0
-for image in images:
+for image in sorted(images, key=numericalSortMap):
 
     image_path = os.path.join(dir_path, image)
     frame = cv2.imread(image_path)
-	
+
     if frame is None:
         print("Skipped frame: ",count)
     else:
