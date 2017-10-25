@@ -51,14 +51,14 @@ To predict use command:
 
 To combine frames in a video use command:
 
-    > python3 combine_frames.py -ext jpg -o output.mp4
+    > python3 combine_frames.py -ext png -o output.mp4
 
 
 ## Tensorboard
 
 You can visualize the progress of your experiments during training using Tensorboard. You can do this manually with the following code, or simply launching the related script.
 
-    > cd /path/to/tensorbox
+    > cd /path/to/TensorboxPy3
     > tensorboard --logdir output
       # (optional, start an ssh tunnel if not experimenting locally)
     > ssh myserver -N -L localhost:6006:localhost:6006
