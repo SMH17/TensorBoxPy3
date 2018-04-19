@@ -64,9 +64,9 @@ You can visualize the progress of your experiments during training using Tensorb
     > ssh myserver -N -L localhost:6006:localhost:6006
       # open localhost:6006 in your browser
 
-![Tensorboard Screenshot 1](https://s17.postimg.cc/3lmr82prv/graph2.png){:height="80%" width="80%"}
-![Tensorboard Screenshot 2](https://s17.postimg.cc/6sharon2j/hystogram.png){:height="80%" width="80%"}
-![Tensorboard Screenshot 3](https://s17.postimg.cc/9mkg54hiz/charts.png){:height="80%" width="80%"}
+![Tensorboard Screenshot 1](https://s17.postimg.cc/o71j00x33/graph.png | width=1300)
+![Tensorboard Screenshot 2](https://s17.postimg.cc/wcjky65wf/hystogram.png | width=1300)
+![Tensorboard Screenshot 3](https://s17.postimg.cc/add6aywrz/charts.png | width=1300)
 
 TensorBoxPy3 by Silvio Marano, official GitHub repository [here](https://github.com/SMH17/TensorBoxPy3).
 The original project [cf-link](https://github.com/Russell91/ReInspect) or [tf-link](https://github.com/Russell91/TensorBox/).
